@@ -1,3 +1,4 @@
+import { toHaveErrorMessage } from '@testing-library/jest-dom/dist/matchers';
 import React, { useState } from 'react';
 
 const Form = (props) => {
@@ -15,14 +16,17 @@ const Form = (props) => {
 
    const createUser = (e) => {
       e.preventDefault();
-      const newUser = {firstName, lastName, email, password, confirmPW};
-      console.log("Welcome,", newUser);
-      setHasBeenSubmitted( true );
+      if (!handleFirstName && !handleLastName && !handleEmail && !handlePassword && !handleConfirmPW) {
+         const newUser = {firstName, lastName, email, password, confirmPW};
+         console.log("Welcome,", newUser);
+         setHasBeenSubmitted( true );
+      } 
+      // This needs some means to return the form with toHaveErrorMessage.
    };
 
    const handleFirstName = (e) => {
       setFirstName(e.target.value);
-      if (e.target.value.length < 1) {
+      if (e.target.value.length === 0) {
          setFirstNameError("This is a required field.");
       } else if (e.target.value.length < 4) {
          setFirstNameError("The name needs to be more than 3 characters long.");
@@ -33,7 +37,7 @@ const Form = (props) => {
 
    const handleLastName = (e) => {
       setLastName(e.target.value);
-      if (e.target.value.length < 1) {
+      if (e.target.value.length === 0) {
          setLastNameError("This is a required field.");
       } else if (e.target.value.length < 4) {
          setLastNameError("The name needs to be more than 3 characters long.");
@@ -44,7 +48,7 @@ const Form = (props) => {
 
    const handleEmail = (e) => {
       setEmail(e.target.value);
-      if (e.target.value.length < 1) {
+      if (e.target.value.length === 0) {
          setEmailError("This is a required field.");
       } else if (!e.target.value.includes("@")) {
          setEmailError("This does not appear to be a valid email.");
@@ -55,7 +59,7 @@ const Form = (props) => {
 
    const handlePassword = (e) => {
       setPassword(e.target.value);
-      if (e.target.value.length < 1) {
+      if (e.target.value.length === 0) {
          setPasswordError("This is a required field.");
       } else if (e.target.value.length < 8) {
          setPasswordError("Your password needs to be at least 8 characters in length.");
@@ -66,7 +70,7 @@ const Form = (props) => {
 
    const handleConfirmPW = (e) => {
       setConfirmPW(e.target.value);
-      if (e.target.value.length < 1) {
+      if (e.target.value.length === 0) {
          setConfirmPWError("This is a required field.");
       } else if (e.target.value !== password) {
          setConfirmPWError("This does not match what you entered for your password.");
